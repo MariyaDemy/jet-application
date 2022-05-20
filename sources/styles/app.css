@@ -56,3 +56,44 @@
 	font-size:20px;
 	vertical-align:middle;
 }
+.wrap{
+    display: flex;
+    flex-direction: column;
+}
+/* .wrap .span {} */
+.contact {
+    display: flex;
+    align-items: center;
+}
+.avatar {    
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+.header{
+text-align: left;
+padding-left: 12rem;
+font-size: 20px;
+}
+.inner {
+    display: flex;
+}
+.name {
+    font-size: 32px;
+    margin-left: 2rem;
+}
+.wrapper {
+    max-width: 300px;
+    margin-right: 3rem;
+}
+.firstcol {
+    margin-right: 10rem;
+}
+.photo {
+    width: 300px;
+    height: 300px;
+}
+.status {
+   text-align: center;
+}
