@@ -1,6 +1,6 @@
 import {JetView} from "webix-jet";
 
-import activitiesData from "../models/activities";
+import activitiesData, {mydate, mytime} from "../models/activities";
 import activitytypesData from "../models/activitytypes";
 import contactsData from "../models/contacts";
 
@@ -46,7 +46,7 @@ export default class PopUp extends JetView {
 								view: "datepicker",
 								type: "time",
 								label: "Time",
-								format: "%h:%i",
+								format: "%H:%i",
 								name: "Time"
 							}
 						]
@@ -96,12 +96,16 @@ export default class PopUp extends JetView {
 		this.Form = this.$$("activityForm");
 	}
 
-	showPopUp(title, btn, id) {
-		this.Btn.setValue(btn);
-		this.Header.setValues(title);
+	showPopUp(id) {
 		const values = activitiesData.getItem(id);
 		if (id) {
 			this.Form.setValues(values);
+			this.Header.setValues("Edit");
+			this.Btn.setValue("Save");
+		}
+		else {
+			this.Header.setValues("Add");
+			this.Btn.setValue("Add");
 		}
 		this.getRoot().show();
 	}
@@ -116,13 +120,15 @@ export default class PopUp extends JetView {
 			const values = this.Form.getValues();
 			if (values.id) {
 				activitiesData.updateItem(values.id, values);
-				this.getRoot().hide();
-				this.Form.clear();
 			}
 			else {
+				values.Time = mytime(values.Time);
+				values.Date = mydate(values.Date);
+				values.DueDate = `${values.Date} ${values.Time}`;
 				activitiesData.add(values);
-				this.Form.clear();
 			}
+			this.Form.clear();
+			this.getRoot().hide();
 		}
 	}
 }

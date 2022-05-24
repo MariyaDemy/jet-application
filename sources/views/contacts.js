@@ -8,13 +8,12 @@ export default class Contacts extends JetView {
 		let list = {
 			view: "list",
 			localId: "contactsList",
-			gravity: 1,
 			type: {
 				template: obj => `<div class='contact'>
 					<div><img class='avatar' src=${obj.Photo || "./sources/imgs/mrcat.jpg"} alt="${obj.FirstName}"/></div>
 					<div class='wrap'><span>${obj.FirstName} ${obj.LastName}</span><span>${obj.Company}</span></div>
 					</div>`,
-				height: 80
+				height: 100
 			},
 			scroll: false,
 			select: true,

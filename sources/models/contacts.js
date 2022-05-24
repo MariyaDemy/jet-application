@@ -5,8 +5,6 @@ const contacts = new webix.DataCollection({
 		$init: (obj) => {
 			obj.value = `${obj.FirstName} ${obj.LastName}`;
 		}
-		// $save: (obj)=>{
-		// }
 	}
 });
 

@@ -5,7 +5,6 @@ import activitytypesData from "../models/activitytypes";
 import contactsData from "../models/contacts";
 import PopUp from "./popup";
 
-
 export default class ActivityTable extends JetView {
 	config() {
 		let activityBtn = {
@@ -15,8 +14,7 @@ export default class ActivityTable extends JetView {
 			type: "icon",
 			icon: "mdi mdi-plus-outline",
 			label: "Add activity",
-			click: () => this.popup.showPopUp("Add", "Add")
-
+			click: () => this.popup.showPopUp()
 		};
 
 		let activityTable = {
@@ -40,10 +38,10 @@ export default class ActivityTable extends JetView {
 					fillspace: true
 				},
 				{
-					id: "Date",
-					header: ["Due date", {content: "datepickerFilter"}],
+					id: "DueDate",
+					header: ["Due date", {content: "dateRangeFilter"}],
 					sort: "date",
-					format: webix.Date.dateToStr("%Y-%m-%d %h:%i"),
+					format: webix.Date.dateToStr("%Y-%m-%d %H:%i"),
 					fillspace: true
 				},
 				{
@@ -76,7 +74,7 @@ export default class ActivityTable extends JetView {
 					});
 				},
 				"mdi-square-edit-outline": (event, id) => {
-					this.popup.showPopUp("Edit", "Save", id);
+					this.popup.showPopUp(id);
 				}
 			}
 		};

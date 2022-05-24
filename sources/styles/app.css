@@ -60,7 +60,6 @@
     display: flex;
     flex-direction: column;
 }
-/* .wrap .span {} */
 .contact {
     display: flex;
     align-items: center;
@@ -78,6 +77,9 @@ font-size: 20px;
 }
 .inner {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 20px;
 }
 .name {
     font-size: 32px;

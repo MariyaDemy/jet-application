@@ -59,19 +59,16 @@ export default class ContactCard extends JetView {
 		};
 	}
 
-	init() {
-	}
-
 	urlChange() {
 		webix.promise.all([
 			contactsData.waitData,
 			statusesData.waitData
 		]).then(() => {
 			const id = this.getParam("id", true);
-			const contact = contactsData.getItem(id);
-			const status = statusesData.getItem(id).Value;
-			contact.Status = status;
 			if (id) {
+				const contact = contactsData.getItem(id);
+				const status = statusesData.getItem(contact.StatusID).Value;
+				contact.Status = status;
 				this.$$("contactCard").parse(contactsData.getItem(id));
 			}
 		});
