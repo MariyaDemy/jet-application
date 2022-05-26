@@ -98,14 +98,10 @@ export default class PopUp extends JetView {
 
 	showPopUp(id) {
 		const values = activitiesData.getItem(id);
+		this.Header.setValues(id ? "Edit" : "Add");
+		this.Btn.setValue(id ? "Save" : "Add");
 		if (id) {
 			this.Form.setValues(values);
-			this.Header.setValues("Edit");
-			this.Btn.setValue("Save");
-		}
-		else {
-			this.Header.setValues("Add");
-			this.Btn.setValue("Add");
 		}
 		this.getRoot().show();
 	}

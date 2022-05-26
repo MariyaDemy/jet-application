@@ -14,8 +14,9 @@ export default class ContactCard extends JetView {
 				<div class="inner">
 					<div class="wrapper">
 					<img class='photo' src=${obj.Photo || "./sources/imgs/mrcat.jpg"} alt="${obj.FirstName}"/>
-					<p class='status'>${obj.Status}</p>
+					<p class='status'>${obj.Status || ""}</p>
 					</div>
+					<div class='cols'>
 					<div class='firstcol'>
 					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Email}</span></p>
 					<p><span class="webix_icon mdi mdi-skype"></span><span>${obj.Skype}</span></p>
@@ -25,7 +26,8 @@ export default class ContactCard extends JetView {
 					<div>
 					<p><span class="webix_icon mdi mdi-calendar-range"></span><span>${obj.Birthday}</span></p>
 					<p><span class="webix_icon mdi mdi-map-marker"></span><span>${obj.Address || "Not specified"}</span></p>
-					</div>			
+					</div>
+					</div>								
 				</div>
 				`
 		};
@@ -66,10 +68,11 @@ export default class ContactCard extends JetView {
 		]).then(() => {
 			const id = this.getParam("id", true);
 			if (id) {
-				const contact = contactsData.getItem(id);
-				const status = statusesData.getItem(contact.StatusID).Value;
-				contact.Status = status;
-				this.$$("contactCard").parse(contactsData.getItem(id));
+				const contact = webix.copy(contactsData.getItem(id));
+				if (contact.StatusID) {
+					contact.Status = statusesData.getItem(contact.StatusID).Value;
+				}
+				this.$$("contactCard").parse(contact);
 			}
 		});
 	}

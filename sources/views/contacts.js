@@ -11,9 +11,9 @@ export default class Contacts extends JetView {
 			type: {
 				template: obj => `<div class='contact'>
 					<div><img class='avatar' src=${obj.Photo || "./sources/imgs/mrcat.jpg"} alt="${obj.FirstName}"/></div>
-					<div class='wrap'><span>${obj.FirstName} ${obj.LastName}</span><span>${obj.Company}</span></div>
+					<div class='wrap'><div>${obj.FirstName} ${obj.LastName}</div><div>${obj.Company}</div></div>
 					</div>`,
-				height: 100
+				height: 60
 			},
 			scroll: false,
 			select: true,
