@@ -69,7 +69,7 @@ export default class ContactCard extends JetView {
 			const id = this.getParam("id", true);
 			if (id) {
 				const contact = webix.copy(contactsData.getItem(id));
-				if (contact.StatusID) {
+				if (contact.StatusID && statusesData.exists(contact.StatusID)) {
 					contact.Status = statusesData.getItem(contact.StatusID).Value;
 				}
 				this.$$("contactCard").parse(contact);
