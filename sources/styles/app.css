@@ -56,3 +56,59 @@
 	font-size:20px;
 	vertical-align:middle;
 }
+.wrap {
+   overflow: hidden;
+}
+.wrap div {
+    white-space: nowrap;  
+    overflow: hidden;
+    text-overflow: ellipsis;     
+}
+.contact {
+    display: flex;
+    align-items: center;
+}
+.avatar {    
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+.header{
+text-align: left;
+padding-left: 12rem;
+font-size: 20px;
+}
+.inner {
+    display: flex;
+    /* flex-wrap: wrap; */
+    justify-content: flex-start;
+    padding: 20px;
+}
+.name {
+    font-size: 32px;
+    margin-left: 2rem;
+}
+.wrapper {
+    max-width: 300px;
+    margin-right: 3rem;
+}
+.cols{ 
+    display: flex;
+    flex-wrap: wrap;
+}
+.firstcol {
+    margin-right: 4rem;
+}
+.photo {
+    width: 300px;
+    height: 300px;
+}
+.status {
+   text-align: center;
+}
+@media screen and (max-width: 1200px){
+    .inner {
+        flex-wrap: wrap;
+    }
+}
