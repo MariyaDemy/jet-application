@@ -24,7 +24,7 @@ export default class ContactCard extends JetView {
 					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Company}</span></p>
 					</div>
 					<div>
-					<p><span class="webix_icon mdi mdi-calendar-range"></span><span>${obj.Birthday}</span></p>
+					<p><span class="webix_icon mdi mdi-calendar-range"></span><span>${obj.Birthday || "Not specified"}</span></p>
 					<p><span class="webix_icon mdi mdi-map-marker"></span><span>${obj.Address || "Not specified"}</span></p>
 					</div>
 					</div>								
@@ -33,7 +33,7 @@ export default class ContactCard extends JetView {
 		};
 
 		let cardBtns = {
-			padding: 10,
+			padding: 5,
 			rows: [{
 				cols: [{
 					view: "button",
@@ -48,25 +48,39 @@ export default class ContactCard extends JetView {
 					label: "Edit",
 					width: 100,
 					type: "icon",
-					icon: "mdi mdi-square-edit-outline"
+					icon: "mdi mdi-square-edit-outline",
+					click: () => this.editData()
 				}]
 			}, {}]
 
 		};
 
+		let activityBtn = {
+			view: "button",
+			width: 200,
+			height: 40,
+			type: "icon",
+			icon: "mdi mdi-plus-outline",
+			label: "Add activity"
+			// click: () =>
+		};
+
 		return {
 			gravity: 5,
-			padding: 10,
-			rows: [{cols: [cardInfo, cardBtns]}]
+			rows: [{cols: [cardInfo, cardBtns]}, {cols: [{}, activityBtn]}]
 		};
 	}
+
+	// init() {
+
+	// }
 
 	urlChange() {
 		webix.promise.all([
 			contactsData.waitData,
 			statusesData.waitData
 		]).then(() => {
-			const id = this.getParam("id", true);
+			let id = this.getParam("id", true);
 			if (id) {
 				const contact = webix.copy(contactsData.getItem(id));
 				if (contact.StatusID && statusesData.exists(contact.StatusID)) {
@@ -75,5 +89,12 @@ export default class ContactCard extends JetView {
 				this.$$("contactCard").parse(contact);
 			}
 		});
+	}
+
+	editData() {
+		let id = this.getParam("id", true);
+
+		this.app.callEvent("onFormShow", [id]);
+		this.show("contactForm");
 	}
 }

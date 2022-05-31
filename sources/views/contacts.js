@@ -1,7 +1,7 @@
 import {JetView} from "webix-jet";
 
 import contactsData from "../models/contacts";
-import ContactCard from "./contactCard";
+// import ContactCard from "./contactCard";
 
 export default class Contacts extends JetView {
 	config() {
@@ -15,21 +15,33 @@ export default class Contacts extends JetView {
 					</div>`,
 				height: 60
 			},
-			scroll: false,
 			select: true,
 			css: "contactslist",
 			on: {
 				onAfterSelect: (id) => {
 					this.setParam("id", id, true);
+					this.show("contactCard");
 				}
+			}
+		};
+
+		let contactBtn = {
+			view: "button",
+			width: 200,
+			height: 40,
+			type: "icon",
+			icon: "mdi mdi-plus-outline",
+			label: "Add contact",
+			click: () => {
+				this.show("contactForm");
 			}
 		};
 
 		let ui = {
 			type: "line",
 			css: "app_layout",
-			cols: [list,
-				{$subview: ContactCard}
+			cols: [{rows: [list, contactBtn]},
+				{$subview: true}
 			]
 		};
 
@@ -37,18 +49,20 @@ export default class Contacts extends JetView {
 	}
 
 	init() {
+		this.List = this.$$("contactsList");
 		this.$$("contactsList").sync(contactsData);
+		this.on(this.app, "selectFirstItem", () => this.List.select(this.List.getFirstId()));
+		this.on(this.app, "selectLastItem", () => this.List.select(this.List.getLastId()));
 	}
 
 	urlChange() {
 		contactsData.waitData.then(() => {
-			const list = this.$$("contactsList");
 			const id = this.getParam("id");
 			if (id) {
-				list.select(id);
+				this.List.select(id);
 			}
 			else {
-				list.select(list.getFirstId());
+				this.List.select(this.List.getFirstId());
 			}
 		});
 	}
