@@ -9,6 +9,9 @@ const contacts = new webix.DataCollection({
 			obj.value = `${obj.FirstName} ${obj.LastName}`;
 			obj.Birthday = templateDate(obj.Birthday);
 		},
+		$update: (obj) => {
+			obj.Birthday = templateDate(obj.Birthday);
+		},
 		$save: (obj) => {
 			obj.Birthday = myDate(obj.Birthday);
 			obj.StartDate = myDate(obj.StartDate);

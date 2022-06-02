@@ -43,8 +43,9 @@
         -webkit-transform: translateX(0);
     }
 }
-.app_header.webix_header{
-	text-align:center;
+.form-header .webix_template{
+	font-size: 28px;
+    padding-left: 4rem;
 }
 .app_layout.webix_layout_clean{
 	background: #EBEDF0;

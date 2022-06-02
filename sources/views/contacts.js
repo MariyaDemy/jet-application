@@ -33,7 +33,7 @@ export default class Contacts extends JetView {
 			icon: "mdi mdi-plus-outline",
 			label: "Add contact",
 			click: () => {
-				this.show("contactForm");
+				this.show("contactForm").then(() => this.app.callEvent("onFormShow")); // onFormShow is in contactForm.js
 			}
 		};
 
@@ -53,6 +53,9 @@ export default class Contacts extends JetView {
 		this.$$("contactsList").sync(contactsData);
 		this.on(this.app, "selectFirstItem", () => this.List.select(this.List.getFirstId()));
 		this.on(this.app, "selectLastItem", () => this.List.select(this.List.getLastId()));
+		this.on(this.app, "onEditClick", (id) => {
+			this.show("contactForm").then(() => this.app.callEvent("onFormShow", [id]));	// onFormShow is in contactForm.js
+		});
 	}
 
 	urlChange() {

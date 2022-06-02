@@ -93,8 +93,8 @@ export default class ContactCard extends JetView {
 
 	editData() {
 		let id = this.getParam("id", true);
-
-		this.app.callEvent("onFormShow", [id]);
-		this.show("contactForm");
+		if (id) {
+			this.app.callEvent("onEditClick", [id]); // onEditClick is in contacts.js
+		}
 	}
 }
