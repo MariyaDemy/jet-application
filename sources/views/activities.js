@@ -14,7 +14,7 @@ export default class ActivityTable extends JetView {
 			type: "icon",
 			icon: "mdi mdi-plus-outline",
 			label: "Add activity",
-			click: () => this.popup.showPopUp()
+			click: () => this.Popup.showPopUp()
 		};
 
 		let activityTable = {
@@ -74,7 +74,7 @@ export default class ActivityTable extends JetView {
 					});
 				},
 				"mdi-square-edit-outline": (event, id) => {
-					this.popup.showPopUp(id);
+					this.Popup.showPopUp(id);
 				}
 			}
 		};
@@ -87,6 +87,7 @@ export default class ActivityTable extends JetView {
 
 	init() {
 		this.$$("activityTable").sync(activitiesData);
-		this.popup = this.ui(PopUp);
+		activitiesData.filter()
+		this.Popup = this.ui(PopUp);
 	}
 }

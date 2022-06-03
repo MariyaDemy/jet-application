@@ -1,7 +1,6 @@
 import {JetView} from "webix-jet";
 
 import contactsData from "../models/contacts";
-// import ContactCard from "./contactCard";
 
 export default class Contacts extends JetView {
 	config() {
@@ -20,7 +19,8 @@ export default class Contacts extends JetView {
 			on: {
 				onAfterSelect: (id) => {
 					this.setParam("id", id, true);
-					this.show("contactCard");
+					//this.show(`contactCard?id=${id}`);
+					this.show("contactCard")
 				}
 			}
 		};
@@ -59,6 +59,7 @@ export default class Contacts extends JetView {
 	}
 
 	urlChange() {
+		//error when there is no data 
 		contactsData.waitData.then(() => {
 			const id = this.getParam("id");
 			if (id) {

@@ -2,6 +2,7 @@ import {JetView} from "webix-jet";
 
 import contactsData from "../models/contacts";
 import statusesData from "../models/statuses";
+import ContactTabview from "./contactTabview";
 
 export default class ContactCard extends JetView {
 	config() {
@@ -40,7 +41,8 @@ export default class ContactCard extends JetView {
 					label: "Delete",
 					width: 100,
 					type: "icon",
-					icon: "mdi mdi-trash-can-outline"
+					icon: "mdi mdi-trash-can-outline",
+					click: () => this.deleteData()
 
 				},
 				{
@@ -55,25 +57,11 @@ export default class ContactCard extends JetView {
 
 		};
 
-		let activityBtn = {
-			view: "button",
-			width: 200,
-			height: 40,
-			type: "icon",
-			icon: "mdi mdi-plus-outline",
-			label: "Add activity"
-			// click: () =>
-		};
-
 		return {
 			gravity: 5,
-			rows: [{cols: [cardInfo, cardBtns]}, {cols: [{}, activityBtn]}]
+			rows: [{cols: [cardInfo, cardBtns]}, {$subview: ContactTabview} ]
 		};
 	}
-
-	// init() {
-
-	// }
 
 	urlChange() {
 		webix.promise.all([
@@ -96,5 +84,18 @@ export default class ContactCard extends JetView {
 		if (id) {
 			this.app.callEvent("onEditClick", [id]); // onEditClick is in contacts.js
 		}
+	}
+
+	deleteData(){
+		let id = this.getParam("id", true);
+		webix.confirm({
+			title: "Delete the contact",
+			text: "Deleting cannot be undone"
+		}).then(() => {
+			//also need to delete actions and files
+			contactsData.remove(id);
+			this.app.callEvent("selectFirstItem");
+			return false;
+		})
 	}
 }
