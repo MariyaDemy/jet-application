@@ -18,17 +18,7 @@ export default class ContactTabview extends JetView {
             label: "Add activity",
             click: () => this.Popup.showPopUp()
         }
-
-        let uploadBtn = {
-            view: "button",
-            width: 200,
-            height: 40,
-            type: "icon",
-            icon: "mdi mdi-cloud-upload-outline",
-            label: "Upload file"
-            // click: () =>
-        }
-		
+	
         return {
         view:"tabview",
         cells:[     
@@ -39,9 +29,7 @@ export default class ContactTabview extends JetView {
         ]}            
         },
         { header:"Files", 
-        body: {rows: [FilesTable, 
-            {cols: [{}, uploadBtn]}
-        ]}   
+        body: FilesTable,   
         }]}
 
 	}

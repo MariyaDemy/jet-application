@@ -23,26 +23,26 @@ export default class ActivitiesTable extends JetView {
                     },
                     {
                         id: "TypeID",
-                        header: ["", {content: "selectFilter"}],
+                        header: ["Activity Type", {content: "selectFilter"}],
                         collection: activitytypesData,
                         sort: "text",
                         fillspace: true
                     },
                     {
                         id: "DueDate",
-                        header: ["", {content: "dateRangeFilter"}],
+                        header: ["Due date", {content: "dateRangeFilter"}],
                         sort: "date",
                         format: webix.Date.dateToStr("%Y-%m-%d %H:%i"),
                         fillspace: true
                     },
                     {
                         id: "Details",
-                        header: ["", {content: "textFilter"}],
+                        header: ["Details", {content: "textFilter"}],
                         sort: "text",
                         fillspace: true
                     },
-                    {header: "", template: "<span class='mdi mdi-square-edit-outline'></span>", width: 45,},
-                    {header: "", template: "<span class='mdi mdi-trash-can-outline'></span>", width: 45,}
+                    {header: "", template: "<span class='mdi mdi-square-edit-outline'></span>", width: 60,},
+                    {header: "", template: "<span class='mdi mdi-trash-can-outline'></span>", width: 60,}
     
                 ],
                 onClick: {

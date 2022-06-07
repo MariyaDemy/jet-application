@@ -162,6 +162,7 @@ export default class ContactForm extends JetView {
 				this.show("contactCard");
 			}
 			else {
+				console.log(values)
 				contactsData.waitSave(() => contactsData.add(values))
 					.then(() => {
 						this.app.callEvent("selectLastItem");

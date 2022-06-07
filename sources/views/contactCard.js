@@ -92,10 +92,17 @@ export default class ContactCard extends JetView {
 			title: "Delete the contact",
 			text: "Deleting cannot be undone"
 		}).then(() => {
-			//also need to delete actions and files
-			contactsData.remove(id);
-			this.app.callEvent("selectFirstItem");
+			//also need to delete actions and files	
+			contactsData.waitData.then(() => {
+			if(contactsData.exists(id))	{
+				contactsData.remove(id);
+				this.app.callEvent("selectFirstItem");
+			}	
+			else {
+				this.app.show("top/contacts")
+			}	
 			return false;
+			})			
 		})
 	}
 }

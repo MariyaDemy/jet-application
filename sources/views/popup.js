@@ -28,7 +28,7 @@ export default class PopUp extends JetView {
 						required: true
 					},
 					{
-						view: "combo",
+						view: "richselect",
 						label: "Contact",
 						options: contactsData,
 						name: "ContactID",
@@ -100,8 +100,7 @@ export default class PopUp extends JetView {
 		const contactId = this.getParam("id", true);
 		const person = contactsData.getItem(contactId);
 		const values = activitiesData.getItem(id);
-		const readonly = this.Form.elements.ContactID.config.readonly = true;
-
+		
 		this.Header.setValues(id ? "Edit" : "Add");
 		this.Btn.setValue(id ? "Save" : "Add");
 
@@ -110,10 +109,10 @@ export default class PopUp extends JetView {
 		}
 		this.getRoot().show();
 		if(contactId && id) {
-			readonly
+			this.Form.elements.ContactID.config.readonly = true;
 		} else if (contactId && !id) {			
 			this.Form.setValues({ContactID: person});
-			readonly
+			this.Form.elements.ContactID.config.readonly = true;			
 		}
 	}
 

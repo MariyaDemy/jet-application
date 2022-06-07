@@ -19,7 +19,6 @@ export default class Contacts extends JetView {
 			on: {
 				onAfterSelect: (id) => {
 					this.setParam("id", id, true);
-					//this.show(`contactCard?id=${id}`);
 					this.show("contactCard")
 				}
 			}
@@ -62,12 +61,13 @@ export default class Contacts extends JetView {
 		//error when there is no data 
 		contactsData.waitData.then(() => {
 			const id = this.getParam("id");
-			if (id) {
+			if (id && contactsData.exists(id)) {
 				this.List.select(id);
 			}
-			else {
+			else if (contactsData){
 				this.List.select(this.List.getFirstId());
 			}
+			//else {this.List.unselectAll()}
 		});
 	}
 }
