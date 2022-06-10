@@ -43,8 +43,9 @@
         -webkit-transform: translateX(0);
     }
 }
-.app_header.webix_header{
-	text-align:center;
+.form-header .webix_template{
+	font-size: 28px;
+    padding-left: 4rem;
 }
 .app_layout.webix_layout_clean{
 	background: #EBEDF0;
@@ -85,6 +86,10 @@ font-size: 20px;
     justify-content: flex-start;
     padding: 20px;
 }
+.photo {
+    max-width: 150px;
+    max-height: 150px;
+}
 .name {
     font-size: 32px;
     margin-left: 2rem;
@@ -100,15 +105,40 @@ font-size: 20px;
 .firstcol {
     margin-right: 4rem;
 }
-.photo {
-    width: 300px;
-    height: 300px;
-}
 .status {
    text-align: center;
+}
+.ava-photo{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 @media screen and (max-width: 1200px){
     .inner {
         flex-wrap: wrap;
     }
+    .photo {
+        max-width: 100px;
+        max-height: 100px;
+    }
+    .status {
+        margin: 0px;
+    }
+    .firstcol {
+        margin-right: 2rem;
+    }
+    .firstcol p {
+        margin: 5px;
+    }
+    .secondcol p {
+        margin: 5px;
+    }
+    .wrapper {
+        max-width: 150px;
+        margin-right: 1rem;
+    }
+    .forminput input {
+        max-width: unset;
+    }
+    
 }
