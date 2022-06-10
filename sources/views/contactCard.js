@@ -96,8 +96,8 @@ export default class ContactCard extends JetView {
 		}).then(() => {
 			contactsData.waitData.then(() => {
 				if (contactsData.exists(id))	{
-					const activities = activitiesData.find(obj => obj.ContactID == id);
-					const files = filesData.find(obj => obj.ContactID == id);
+					const activities = activitiesData.find(obj => +obj.ContactID === +id);
+					const files = filesData.find(obj => +obj.ContactID === +id);
 					activities.forEach(elem => activitiesData.remove(elem.id));
 					files.forEach(elem => filesData.remove(elem.id));
 					contactsData.remove(id);
