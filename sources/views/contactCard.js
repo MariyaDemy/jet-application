@@ -1,6 +1,8 @@
 import {JetView} from "webix-jet";
 
+import activitiesData from "../models/activities";
 import contactsData from "../models/contacts";
+import filesData from "../models/files";
 import statusesData from "../models/statuses";
 import ContactTabview from "./contactTabview";
 
@@ -24,7 +26,7 @@ export default class ContactCard extends JetView {
 					<p><span class="webix_icon mdi mdi-finance"></span><span>${obj.Job || "-"}</span></p>
 					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Company}</span></p>
 					</div>
-					<div>
+					<div class='secondcol'>
 					<p><span class="webix_icon mdi mdi-calendar-range"></span><span>${obj.Birthday || "Not specified"}</span></p>
 					<p><span class="webix_icon mdi mdi-map-marker"></span><span>${obj.Address || "Not specified"}</span></p>
 					</div>
@@ -59,7 +61,7 @@ export default class ContactCard extends JetView {
 
 		return {
 			gravity: 5,
-			rows: [{cols: [cardInfo, cardBtns]}, {$subview: ContactTabview} ]
+			rows: [{cols: [cardInfo, cardBtns]}, {$subview: ContactTabview}]
 		};
 	}
 
@@ -86,23 +88,26 @@ export default class ContactCard extends JetView {
 		}
 	}
 
-	deleteData(){
+	deleteData() {
 		let id = this.getParam("id", true);
 		webix.confirm({
 			title: "Delete the contact",
 			text: "Deleting cannot be undone"
 		}).then(() => {
-			//also need to delete actions and files	
 			contactsData.waitData.then(() => {
-			if(contactsData.exists(id))	{
-				contactsData.remove(id);
-				this.app.callEvent("selectFirstItem");
-			}	
-			else {
-				this.app.show("top/contacts")
-			}	
-			return false;
-			})			
-		})
+				if (contactsData.exists(id))	{
+					const activities = activitiesData.find(obj => obj.ContactID == id);
+					const files = filesData.find(obj => obj.ContactID == id);
+					activities.forEach(elem => activitiesData.remove(elem.id));
+					files.forEach(elem => filesData.remove(elem.id));
+					contactsData.remove(id);
+					this.app.callEvent("selectFirstItem");
+				}
+				else {
+					this.app.show("top/contacts");
+				}
+				return false;
+			});
+		});
 	}
 }

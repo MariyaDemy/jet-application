@@ -100,7 +100,7 @@ export default class PopUp extends JetView {
 		const contactId = this.getParam("id", true);
 		const person = contactsData.getItem(contactId);
 		const values = activitiesData.getItem(id);
-		
+
 		this.Header.setValues(id ? "Edit" : "Add");
 		this.Btn.setValue(id ? "Save" : "Add");
 
@@ -108,11 +108,12 @@ export default class PopUp extends JetView {
 			this.Form.setValues(values);
 		}
 		this.getRoot().show();
-		if(contactId && id) {
+		if (contactId && id) {
 			this.Form.elements.ContactID.config.readonly = true;
-		} else if (contactId && !id) {			
+		}
+		else if (contactId && !id) {
 			this.Form.setValues({ContactID: person});
-			this.Form.elements.ContactID.config.readonly = true;			
+			this.Form.elements.ContactID.config.readonly = true;
 		}
 	}
 

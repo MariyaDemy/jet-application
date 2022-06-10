@@ -19,21 +19,22 @@ export default class ContactForm extends JetView {
 				{rows: [{
 					view: "text",
 					label: "First name",
-					name: "FirstName",
-					inputWidth: 300
+					name: "FirstName"
 				},
 				{
 					view: "text",
 					label: "Last name",
-					name: "LastName",
-					inputWidth: 300
+					name: "LastName"
 				},
 				{
 					view: "datepicker",
 					label: "Joining date",
 					format: "%d %M %Y",
 					name: "StartDate",
-					inputWidth: 300
+					required: true,
+					// labelWidth: "auto", not working with required
+					labelWidth: 100
+
 				},
 				{
 					view: "richselect",
@@ -44,33 +45,27 @@ export default class ContactForm extends JetView {
 						},
 						data: statusesData
 					},
-					name: "StatusID",
-					inputWidth: 300
-					// required: true
+					name: "StatusID"
 				},
 				{
 					view: "text",
 					label: "Job",
-					name: "Job",
-					inputWidth: 300
+					name: "Job"
 				},
 				{
 					view: "text",
 					label: "Company",
-					name: "Company",
-					inputWidth: 300
+					name: "Company"
 				},
 				{
 					view: "text",
 					label: "Website",
-					name: "Website",
-					inputWidth: 300
+					name: "Website"
 				},
 				{
 					view: "textarea",
 					label: "Adress",
 					name: "Address",
-					inputWidth: 300,
 					inputHeight: 75
 				}
 				]},
@@ -78,50 +73,63 @@ export default class ContactForm extends JetView {
 					{
 						view: "text",
 						label: "Email",
-						name: "Email",
-						inputWidth: 300
+						name: "Email"
 					},
 					{
 						view: "text",
 						label: "Skype",
-						name: "Skype",
-						inputWidth: 300
+						name: "Skype"
 					}, {
 						view: "text",
 						label: "Phone",
-						name: "Phone",
-						inputWidth: 300
+						name: "Phone"
 					},
 					{
 						view: "datepicker",
 						label: "Birthday",
 						format: "%d %M %Y",
-						name: "Birthday",
-						inputWidth: 300
+						name: "Birthday"
 					},
 					{cols: [{
-						template: "photo",
+						localId: "photoTemplate",
+						template: obj => `<div><img class='ava-photo' src=${obj.Photo ||
+						"./sources/imgs/mrcat.jpg"} alt="Avatar"/></div>`,
 						height: 200,
-						width: 200
+						maxWidth: 200,
+						borderless: true
 					}, {padding: 30,
 						rows: [
-							{view: "button",
+							{view: "uploader",
+								localId: "photoUploader",
 								value: "Change photo",
-								inputWidth: 150},
+								autosend: false,
+								accept: "image/png, image/gif, image/jpeg",
+								multiple: false,
+								upload: contactsData,
+								on: {onBeforeFileAdd: upload => this.uploadPhoto(upload)
+									// 	onAfterFileAdd: ()=>{
+									// 	$$("photoUploader").send();
+									//    }
+								}
+							},
 							{view: "button",
-								value: "Delete photo",
-								inputWidth: 150}
+								value: "Delete photo"
+							}
 						]
 					}]}
 				]}
 
-			]
-			// rules: {
-			// }
+			],
+			rules: {
+				FirstName: webix.rules.isNotEmpty,
+				LastName: webix.rules.isNotEmpty,
+				Job: webix.rules.isNotEmpty,
+				Company: webix.rules.isNotEmpty
+
+			}
 		};
 
 		return {
-			// gravity: 5,
 			rows: [header, form, {padding: 10,
 				cols: [{}, {view: "button",
 					value: "Cancel",
@@ -162,7 +170,6 @@ export default class ContactForm extends JetView {
 				this.show("contactCard");
 			}
 			else {
-				console.log(values)
 				contactsData.waitSave(() => contactsData.add(values))
 					.then(() => {
 						this.app.callEvent("selectLastItem");
@@ -178,9 +185,19 @@ export default class ContactForm extends JetView {
 	cancelData() {
 		const values = this.Form.getValues();
 		if (!values.id) {
-			this.app.callEvent("selectFirstItem");			
-		} 
+			this.app.callEvent("selectFirstItem");
+		}
 		this.show("contactCard");
-		this.Form.clear();		
+		this.Form.clear();
+	}
+
+	uploadPhoto(upload) {
+		let file = upload.file;
+		let reader = new FileReader();
+		reader.onload = (event) => {
+			this.$$("photoTemplate").setValues({Photo: event.target.result});
+		};
+		reader.readAsDataURL(file);
+		return false;
 	}
 }
