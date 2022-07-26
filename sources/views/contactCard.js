@@ -1,7 +1,12 @@
 import {JetView} from "webix-jet";
 
+import activitiesData from "../models/activities";
 import contactsData from "../models/contacts";
+import filesData from "../models/files";
 import statusesData from "../models/statuses";
+import ContactTabview from "./contactTabview";
+
+const templateDate = webix.Date.dateToStr("%Y-%m-%d");
 
 export default class ContactCard extends JetView {
 	config() {
@@ -10,7 +15,7 @@ export default class ContactCard extends JetView {
 			localId: "contactCard",
 			gravity: 2,
 			template: obj => `
-				<h2 class="name">${obj.FirstName} ${obj.LastName}</h2>
+				<h2 class="name">${obj.FirstName || ""} ${obj.LastName || "Not specified"}</h2>
 				<div class="inner">
 					<div class="wrapper">
 					<img class='photo' src=${obj.Photo || "./sources/imgs/mrcat.jpg"} alt="${obj.FirstName}"/>
@@ -18,13 +23,13 @@ export default class ContactCard extends JetView {
 					</div>
 					<div class='cols'>
 					<div class='firstcol'>
-					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Email}</span></p>
-					<p><span class="webix_icon mdi mdi-skype"></span><span>${obj.Skype}</span></p>
-					<p><span class="webix_icon mdi mdi-finance"></span><span>${obj.Job || "-"}</span></p>
-					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Company}</span></p>
+					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Email || "Not specified"}</span></p>
+					<p><span class="webix_icon mdi mdi-skype"></span><span>${obj.Skype || "Not specified"}</span></p>
+					<p><span class="webix_icon mdi mdi-finance"></span><span>${obj.Job || "Not specified"}</span></p>
+					<p><span class="webix_icon mdi mdi-email"></span><span>${obj.Company || "Not specified"}</span></p>
 					</div>
-					<div>
-					<p><span class="webix_icon mdi mdi-calendar-range"></span><span>${obj.Birthday}</span></p>
+					<div class='secondcol'>
+					<p><span class="webix_icon mdi mdi-calendar-range"></span><span>${templateDate(obj.Birthday) || "Not specified"}</span></p>
 					<p><span class="webix_icon mdi mdi-map-marker"></span><span>${obj.Address || "Not specified"}</span></p>
 					</div>
 					</div>								
@@ -33,14 +38,15 @@ export default class ContactCard extends JetView {
 		};
 
 		let cardBtns = {
-			padding: 10,
+			padding: 5,
 			rows: [{
 				cols: [{
 					view: "button",
 					label: "Delete",
 					width: 100,
 					type: "icon",
-					icon: "mdi mdi-trash-can-outline"
+					icon: "mdi mdi-trash-can-outline",
+					click: () => this.deleteData()
 
 				},
 				{
@@ -48,7 +54,8 @@ export default class ContactCard extends JetView {
 					label: "Edit",
 					width: 100,
 					type: "icon",
-					icon: "mdi mdi-square-edit-outline"
+					icon: "mdi mdi-square-edit-outline",
+					click: () => this.editData()
 				}]
 			}, {}]
 
@@ -56,8 +63,7 @@ export default class ContactCard extends JetView {
 
 		return {
 			gravity: 5,
-			padding: 10,
-			rows: [{cols: [cardInfo, cardBtns]}]
+			rows: [{cols: [cardInfo, cardBtns]}, {$subview: ContactTabview}]
 		};
 	}
 
@@ -66,7 +72,7 @@ export default class ContactCard extends JetView {
 			contactsData.waitData,
 			statusesData.waitData
 		]).then(() => {
-			const id = this.getParam("id", true);
+			let id = this.getParam("id", true);
 			if (id) {
 				const contact = webix.copy(contactsData.getItem(id));
 				if (contact.StatusID && statusesData.exists(contact.StatusID)) {
@@ -74,6 +80,36 @@ export default class ContactCard extends JetView {
 				}
 				this.$$("contactCard").parse(contact);
 			}
+			else this.$$("contactCard").setValues({});
+		});
+	}
+
+	editData() {
+		let id = this.getParam("id", true);
+		if (id) {
+			this.app.callEvent("onEditClick", [id]); // onEditClick is in contacts.js
+		}
+	}
+
+	deleteData() {
+		let id = this.getParam("id", true);
+		webix.confirm({
+			title: "Delete the contact",
+			text: "Deleting cannot be undone"
+		}).then(() => {
+			contactsData.waitData.then(() => {
+				if (contactsData.exists(id))	{
+					const activities = activitiesData.find(obj => +obj.ContactID === +id);
+					const files = filesData.find(obj => +obj.ContactID === +id);
+					activities.forEach(elem => activitiesData.remove(elem.id));
+					files.forEach(elem => filesData.remove(elem.id));
+					contactsData.remove(id);
+				}
+				if (contactsData.count()) {
+					this.app.callEvent("selectFirstItem");
+				}
+				else this.app.show("top/contacts");
+			});
 		});
 	}
 }

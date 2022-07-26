@@ -2,24 +2,13 @@ import {JetView} from "webix-jet";
 
 import activitiesData from "../models/activities";
 import activitytypesData from "../models/activitytypes";
-import contactsData from "../models/contacts";
 import PopUp from "./popup";
 
-export default class ActivityTable extends JetView {
+export default class ActivitiesTable extends JetView {
 	config() {
-		let activityBtn = {
-			view: "button",
-			width: 200,
-			height: 50,
-			type: "icon",
-			icon: "mdi mdi-plus-outline",
-			label: "Add activity",
-			click: () => this.Popup.showPopUp()
-		};
-
-		let activityTable = {
+		return {
 			view: "datatable",
-			localId: "activityTable",
+			localId: "activitiesTable",
 			select: "cell",
 			scrollX: false,
 			columns: [
@@ -50,15 +39,8 @@ export default class ActivityTable extends JetView {
 					sort: "text",
 					fillspace: true
 				},
-				{
-					id: "ContactID",
-					header: ["Contact", {content: "selectFilter"}],
-					collection: contactsData,
-					sort: "text",
-					fillspace: true
-				},
-				{header: "", template: "<span class='mdi mdi-square-edit-outline'></span>"},
-				{header: "", template: "<span class='mdi mdi-trash-can-outline'></span>"}
+				{header: "", template: "<span class='mdi mdi-square-edit-outline'></span>", width: 60},
+				{header: "", template: "<span class='mdi mdi-trash-can-outline'></span>", width: 60}
 
 			],
 			onClick: {
@@ -78,16 +60,23 @@ export default class ActivityTable extends JetView {
 				}
 			}
 		};
-
-		return {rows: [
-			{padding: 10, cols: [{}, activityBtn]},
-			activityTable
-		]};
 	}
 
 	init() {
-		this.$$("activityTable").sync(activitiesData);
-		activitiesData.filter();
+		this.Table = this.$$("activitiesTable");
+		this.Table.sync(activitiesData);
 		this.Popup = this.ui(PopUp);
+	}
+
+	urlChange() {
+		webix.promise.all([
+			activitiesData.waitData,
+			activitytypesData.waitData
+		]).then(() => {
+			let id = this.getParam("id", true);
+			if (id) {
+				activitiesData.filter(obj => obj.ContactID.toString() === id.toString());
+			}
+		});
 	}
 }
