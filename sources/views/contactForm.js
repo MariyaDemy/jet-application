@@ -19,22 +19,21 @@ export default class ContactForm extends JetView {
 				{rows: [{
 					view: "text",
 					label: "First name",
-					name: "FirstName"
+					name: "FirstName",
+					required: true
 				},
 				{
 					view: "text",
 					label: "Last name",
-					name: "LastName"
+					name: "LastName",
+					required: true
 				},
 				{
 					view: "datepicker",
 					label: "Joining date",
 					format: "%d %M %Y",
 					name: "StartDate",
-					required: true,
-					// labelWidth: "auto", not working with required
-					labelWidth: 100
-
+					required: true
 				},
 				{
 					view: "richselect",
@@ -50,12 +49,14 @@ export default class ContactForm extends JetView {
 				{
 					view: "text",
 					label: "Job",
-					name: "Job"
+					name: "Job",
+					required: true
 				},
 				{
 					view: "text",
 					label: "Company",
-					name: "Company"
+					name: "Company",
+					required: true
 				},
 				{
 					view: "text",
@@ -88,7 +89,8 @@ export default class ContactForm extends JetView {
 						view: "datepicker",
 						label: "Birthday",
 						format: "%d %M %Y",
-						name: "Birthday"
+						name: "Birthday",
+						required: true
 					},
 					{cols: [{
 						localId: "photoTemplate",
@@ -126,6 +128,9 @@ export default class ContactForm extends JetView {
 				Job: webix.rules.isNotEmpty,
 				Company: webix.rules.isNotEmpty
 
+			},
+			elementsConfig: {
+				labelWidth: 100
 			}
 		};
 

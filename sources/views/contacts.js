@@ -50,7 +50,10 @@ export default class Contacts extends JetView {
 	init() {
 		this.List = this.$$("contactsList");
 		this.$$("contactsList").sync(contactsData);
-		this.on(this.app, "selectFirstItem", () => this.List.select(this.List.getFirstId()));
+		this.on(this.app, "selectFirstItem", () => {
+			const id = this.List.getFirstId();
+			if (id) this.List.select(id);
+		});
 		this.on(this.app, "selectLastItem", () => this.List.select(this.List.getLastId()));
 		this.on(this.app, "onEditClick", (id) => {
 			this.show("contactForm").then(() => this.app.callEvent("onFormShow", [id]));	// onFormShow is in contactForm.js

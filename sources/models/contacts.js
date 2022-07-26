@@ -1,5 +1,4 @@
 const myDate = webix.Date.dateToStr("%Y-%m-%d %H:%i");
-const templateDate = webix.Date.dateToStr("%Y-%m-%d");
 
 const contacts = new webix.DataCollection({
 	url: "http://localhost:8096/api/v1/contacts/",
@@ -7,10 +6,8 @@ const contacts = new webix.DataCollection({
 	scheme: {
 		$init: (obj) => {
 			obj.value = `${obj.FirstName} ${obj.LastName}`;
-			obj.Birthday = templateDate(obj.Birthday);
-		},
-		$update: (obj) => {
-			obj.Birthday = templateDate(obj.Birthday);
+			obj.Birthday = new Date(obj.Birthday);
+			obj.StartDate = new Date(obj.StartDate);
 		},
 		$save: (obj) => {
 			obj.Birthday = myDate(obj.Birthday);

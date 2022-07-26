@@ -99,22 +99,18 @@ export default class PopUp extends JetView {
 	showPopUp(id) {
 		const contactId = this.getParam("id", true);
 		const person = contactsData.getItem(contactId);
-		const values = activitiesData.getItem(id);
+		const values = activitiesData.getItem(id) || {};
 
 		this.Header.setValues(id ? "Edit" : "Add");
 		this.Btn.setValue(id ? "Save" : "Add");
 
-		if (id) {
-			this.Form.setValues(values);
+		if (contactId) {
+			this.Form.elements.ContactID.config.readonly = true;
+			if (!id) values.ContactID = person;
 		}
+
+		this.Form.setValues(values);
 		this.getRoot().show();
-		if (contactId && id) {
-			this.Form.elements.ContactID.config.readonly = true;
-		}
-		else if (contactId && !id) {
-			this.Form.setValues({ContactID: person});
-			this.Form.elements.ContactID.config.readonly = true;
-		}
 	}
 
 	hidePopUp() {
